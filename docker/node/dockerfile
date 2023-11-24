@@ -1,0 +1,9 @@
+FROM "node:latest"
+
+WORKDIR /usr/src/
+
+RUN cd /usr/src/
+RUN npm install -g npm
+
+
+EXPOSE 3000

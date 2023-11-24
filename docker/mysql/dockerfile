@@ -1,0 +1,13 @@
+FROM "mysql:latest"
+
+
+ENV MYSQL_ROOT_PASSWORD root
+ENV MYSQL_DATABASE MemoApp
+ENV MYSQL_USER nodejs
+ENV MYSQL_PASSWORD nodejs
+
+
+COPY ./conf/my.cnf /etc/mysql/conf.d/my.cnf
+COPY ./data/ /docker-entrypoint-initdb.d/
+
+EXPOSE 3306

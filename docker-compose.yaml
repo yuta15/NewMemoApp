@@ -1,0 +1,45 @@
+services:
+
+    nginx:
+        build: 
+            context: ./docker/nginx
+            dockerfile: Dockerfile
+        container_name: nginx
+        restart: always
+        volumes:
+            - ./docker/nginx/conf/:/etc/nginx/conf.d/
+            - ./docker/nginx/log/:/var/log/nginx/
+        ports:
+            - 80:80
+
+    node:
+        build: 
+            context: ./docker/node
+            dockerfile: Dockerfile
+        container_name: node
+        restart: always
+        volumes:
+            - type: bind
+              source: ./app/
+              target: /usr/src/
+        ports:
+            - 3000:3000
+        tty: true
+        stdin_open: true
+        command: >
+            bash -c "npm install && \
+            npm install -g express mysql ejs nodemon && \
+            nodemon app.js" 
+
+
+    mysql: 
+        build: 
+            context: ./docker/mysql
+            dockerfile: Dockerfile
+        container_name: mysql
+        restart: always
+        volumes: 
+            - ./docker/mysql/data/:/docker-entrypoint-initdb.d/
+            - ./docker/mysql/conf/:/etc/mysql/conf.d/
+        ports: 
+            - 3306:3306
